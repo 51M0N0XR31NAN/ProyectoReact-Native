@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--PAGINA DE ALERTAS-->
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1>Alertas</h1>
+        <p>Revisa productos próximos a vencer, productos vencidos y niveles bajos de inventario.</p>
+    </div>
+    <a class="btn btn-outline-light" href="/lista-compra">Abrir lista de compra</a>
+</div>
+
+<!-- TARJETAS DE ALERTAS-->
+<!-- Se muestran como cards visuales con colores distintivos según el tipo de alerta -->
+<div class="row g-4">
+    {% if alert_products %}
+        <!-- Si hay alertas, mostrar las 3 primeras -->
+        {% for product in alert_products[:3] %}
+        <div class="col-md-4">
+            <!-- Tarjeta de alerta con clase de color según estado_clase -->
+            <!-- danger (rojo) = vencido, warning (amarillo) = por vencer, etc. -->
+            <article class="alert-card {{ product.estado_clase }}">
+                <!-- Tipo de alerta-->
+                <td> 
+                    <div class="d-flex flex-wrap gap-1"> {% for alerta in product.alertas %} <span class="status {{ alerta.clase }}">{{ alerta.texto }}</span> {% endfor %} 
+                    </div> 
+                </td>
+
+                <!-- Nombre del producto -->
+                <h2>{{ product.nombre }}</h2>
+                <!-- Información resumida: categoría, cantidad y fecha vencimiento -->
+                <p>{{ product.categoria }} · {{ product.cantidad }} unidades · vence {{ product.vence }}</p>
+            </article>
+        </div>
+        {% endfor %}
+    {% else %}
+        <!-- Si no hay alertas, mostrar mensaje de inventario estable -->
+        <div class="col-12">
+            <article class="alert-card info">
+                <span>Sin alertas</span>
+                <h2>Inventario estable</h2>
+                <p>No hay productos vencidos, próximos a vencer o con stock bajo.</p>
+            </article>
+        </div>
+    {% endif %}
+</div>
+
+<!-- TABLA DE HISTORIAL DE NOTIFICACIONES -->
+<!-- Tabla detallada con todas las alertas registradas -->
+<section class="panel mt-4">
+    <div class="section-title">
+        <h2>Historial de notificaciones</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Producto</th>
+                <th>Mensaje</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Iterar sobre todas las alertas y mostrar en tabla -->
+            {% for product in alert_products %}
+            <tr>
+                
+                <td>{{ product.estado }}</td>
+                <td>{{ product.nombre }}</td>
+                <td>Revisar inventario y vencimiento</td>
+                <td>{{ product.vence }}</td>
+                <!-- Estado badge con color según estado_clase -->
+                <td><span class="status {{ product.estado_clase }}">Pendiente</span></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

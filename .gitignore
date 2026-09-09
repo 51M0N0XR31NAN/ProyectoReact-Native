@@ -1,0 +1,6 @@
+.venv/
+node_modules/
+.expo/
+.vscode/
+__pycache__/
+*.pyc

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1>Editar producto</h1>
+        <p>Actualiza los datos del producto {{ product.codigo }}.</p>
+    </div>
+    <a class="btn btn-outline-light" href="/producto/{{ product.codigo }}">Cancelar</a>
+</div>
+
+<section class="panel">
+    <form id="productForm" method="post" action="/producto/{{ product.codigo }}/editar">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Nombre del producto</label>
+                <input name="nombre" type="text" class="form-control" value="{{ product.nombre }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Categoría</label>
+                <select name="categoria" class="form-select" id="categorySelect">
+                    {% for category in ["Alimentos", "Bebidas", "Aseo", "Medicamentos", "Otros"] %}
+                    <option {% if product.categoria == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Presentación</label>
+                <select name="presentacion" class="form-select" id="presentacionSelect" required>
+                    <option value="{{ product.presentacion or 'Unidad' }}" selected>{{ product.presentacion or 'Unidad' }}</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Cantidad</label>
+                <input name="cantidad" type="number" min="0" class="form-control" value="{{ product.cantidad }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Ubicación</label>
+                <input name="ubicacion" type="text" class="form-control" value="{{ product.ubicacion }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Fecha de vencimiento</label>
+                <input name="vence" type="date" class="form-control" value="{{ product.vence if product.vence != 'Sin fecha' else '' }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Código</label>
+                <input type="text" class="form-control" value="{{ product.codigo }}" disabled>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a class="btn btn-outline-light" href="/inventario">Volver al inventario</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

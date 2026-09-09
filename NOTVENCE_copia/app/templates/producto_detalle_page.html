@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1>{{ product.nombre }}</h1>
+        <p>Detalle del producto usando ruta dinámica: /producto/{{ product.codigo }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-light" href="/inventario">Volver</a>
+        <a class="btn btn-primary" href="/producto/{{ product.codigo }}/editar">Editar producto</a>
+    </div>
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="auth-message success mb-4">{{ request.query_params.get('success') }}</div>
+{% endif %}
+
+<section class="panel product-detail">
+    <div>
+        <span>Código</span>
+        <strong>{{ product.codigo }}</strong>
+    </div>
+    <div>
+        <span>Categoría</span>
+        <strong>{{ product.categoria }}</strong>
+    </div>
+    <div>
+        <span>Cantidad</span>
+        <strong>{{ product.cantidad }}</strong>
+    </div>
+    <div>
+        <span>Ubicación</span>
+        <strong>{{ product.ubicacion }}</strong>
+    </div>
+    <div>
+        <span>Fecha de vencimiento</span>
+        <strong>{{ product.vence }}</strong>
+    </div>
+    <div>
+        <span>Estado</span>
+        <strong><span class="status {{ product.estado_clase }}">{{ product.estado }}</span></strong>
+    </div>
+    <div> 
+        <span>Estado</span> 
+        <strong class="d-flex flex-wrap gap-2"> {% for alerta in product.alertas %} <span class="status {{ alerta.clase }}">{{ alerta.texto }}</span> {% endfor %} </strong> 
+    </div>
+</section>
+{% endblock %}

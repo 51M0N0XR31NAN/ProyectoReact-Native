@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotVence - Iniciar sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}?v=20260820">
+</head>
+<body class="login-page">
+<main class="login-hero">
+    <section class="hero-copy">
+        <img class="hero-logo" src="{{ url_for('static', path='img/notvence-logo.png') }}" alt="Logo NotVence">
+        <h1>Aprovecha hoy, no pierdas mañana</h1>
+        <p>Elige la acción que quieres realizar para continuar.</p>
+
+        {% if error %}
+        <div class="auth-message error">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+        <div class="auth-message success">{{ success }}</div>
+        {% endif %}
+
+        <div class="auth-choice-panel" aria-label="Selecciona una opción">
+            <button type="button" class="auth-option {% if mode == 'login' %}active{% endif %}" data-auth="login" onclick="toggleAuthForm('login')">Iniciar sesión</button>
+            <button type="button" class="auth-option {% if mode == 'register' %}active{% endif %}" data-auth="register" onclick="toggleAuthForm('register')">Crear cuenta</button>
+        </div>
+
+        <div class="auth-form-shell hidden">
+            <form id="registerFormPanel" class="auth-card auth-form-panel" method="post" action="/registro" style="display:none;">
+                <h2>Crear cuenta</h2>
+                <p>Regístrate para poder entrar al sistema.</p>
+                <input type="text" name="username" class="form-control" placeholder="Usuario nuevo" required>
+
+<input type="email" name="email" class="form-control" placeholder="Correo electrónico" autocomplete="email" required>
+
+<input type="password" name="password" class="form-control" placeholder="Contraseña nueva" required>
+
+                <button type="submit" class="btn btn-primary w-100">Registrarme</button>
+            </form>
+
+            <form id="loginFormPanel" class="auth-card auth-form-panel" method="post" action="/login" style="display:none;">
+                <h2>Iniciar sesión</h2>
+                <p>Ingresa solo si ya creaste una cuenta.</p>
+                <input type="text" name="username" class="form-control" placeholder="Usuario registrado" required>
+                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+                <button type="submit" class="btn btn-outline-light w-100">Ingresar</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="{{ url_for('static', path='js/app.js') }}?v=20260820"></script>
+</body>
+</html>

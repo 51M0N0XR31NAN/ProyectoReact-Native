@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- PÁGINA DE REGISTRO DE PRODUCTOS -->
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1>Registrar producto</h1>
+        <p>Agrega productos al inventario. Al guardar, aparecerán en inventario, alertas y lista de compra.</p>
+    </div>
+    <!-- Botón para volver al inventario -->
+    <a class="btn btn-outline-light" href="/inventario">Volver al inventario</a>
+</div>
+
+<!-- PANEL CON FORMULARIO DE NUEVO PRODUCTO -->
+<section class="panel">
+    <!-- Formulario que envía datos a /producto/nuevo (POST) -->
+    <!-- setupProductForm() en app.js valida los campos requeridos -->
+    <form id="productForm" method="post" action="/producto/nuevo">
+        <div class="row g-3">
+            <!--  Nombre del producto (requerido) -->
+            <div class="col-md-6">
+                <label class="form-label">Nombre del producto</label>
+                <input name="nombre" type="text" class="form-control" placeholder="Ej. Aceite de oliva" required>
+            </div>
+            
+            <!--  Categoría del producto -->
+            <div class="col-md-6">
+                <label class="form-label">Categoría</label>
+                <select name="categoria" class="form-select" id="categorySelect">
+                    <option>Alimentos</option>
+                    <option>Bebidas</option>
+                    <option>Aseo</option>
+                    <option>Medicamentos</option>
+                    <option>Otros</option>
+                </select>
+            </div>
+            
+            <!--  Presentación del producto (dinámico) -->
+            <div class="col-md-6">
+                <label class="form-label">Presentación</label>
+                <select name="presentacion" class="form-select" id="presentacionSelect" required>
+                    <option value="">Selecciona una presentación</option>
+                </select>
+            </div>
+            
+            <!--  Cantidad en el inventario (requerido) -->
+            <div class="col-md-6">
+                <label class="form-label">Cantidad</label>
+                <input name="cantidad" type="number" min="0" class="form-control" placeholder="Ej. 50" required>
+            </div>
+            
+            <!--  Ubicación física del producto -->
+            <div class="col-md-6">
+                <label class="form-label">Ubicación</label>
+                <input name="ubicacion" type="text" class="form-control" placeholder="Ej. Estantería 1">
+            </div>
+            
+            <!--  Fecha de vencimiento -->
+            <div class="col-md-6">
+                <label class="form-label">Fecha de vencimiento</label>
+                <input name="vence" type="date" class="form-control">
+            </div>
+            
+            <!--  Código de barras (puede ser escaneado o simulado) -->
+            <div class="col-md-6">
+                <label class="form-label">Código escaneado</label>
+                <!-- id="barcodeInput" es usado por setupProductForm() para el escaneo simulado -->
+                <input id="barcodeInput" name="codigo" type="text" class="form-control" placeholder="Ej. 7701234567890">
+            </div>
+            
+            <!--  Descripción opcional del producto -->
+            <div class="col-md-12">
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" rows="4" placeholder="Descripción breve del producto"></textarea>
+            </div>
+        </div>
+        
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <!-- Botón para guardar el producto -->
+            <button type="submit" class="btn btn-primary">Guardar producto</button>
+            
+            <!-- Botón para simular escaneo (genera código de barras aleatorio) -->
+            <button id="scanButton" type="button" class="btn btn-outline-light">Simular escaneo</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
