@@ -27,11 +27,6 @@ PRESENTATIONS = {
 }
 
 
-PRODUCTS: list[dict] = []
-
-
-
-
 # ======================
 # FUNCIONES AUXILIARES
 # ======================
@@ -71,22 +66,3 @@ def product_status(quantity, expiration):
         alerts.append(("Activo", "success"))
 
     return alerts
-
-
-
-def find_product(codigo):
-    """Busca un producto por su codigo."""
-    return next((product for product in PRODUCTS if product["codigo"] == codigo), None)
-
-
-def next_product_code() -> str:
-    """Genera el siguiente código disponible para un producto (NV-XXX)."""
-    existentes = {product["codigo"] for product in PRODUCTS}
-    n = len(PRODUCTS) + 1
-    codigo = f"NV-{n:03d}"
-    while codigo in existentes:
-        n += 1
-        codigo = f"NV-{n:03d}"
-    return codigo
-
-

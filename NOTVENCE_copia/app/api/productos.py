@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.deps import get_current_user
+from app.deps import get_current_casa
 from app.products_repo import (
     list_products,
     get_product,
@@ -31,9 +31,9 @@ def listar_productos(
         default=None,
         description="Busca por nombre o código",
     ),
-    user: str = Depends(get_current_user),
+    id_casa: int = Depends(get_current_casa),
 ):
-    productos = list_products()
+    productos = list_products(id_casa)
 
     if categoria:
         productos = [
@@ -70,9 +70,9 @@ def listar_productos(
 )
 def obtener_producto(
     codigo: str,
-    user: str = Depends(get_current_user),
+    id_casa: int = Depends(get_current_casa),
 ):
-    producto = get_product(codigo)
+    producto = get_product(codigo, id_casa)
 
     if not producto:
         raise HTTPException(
@@ -95,7 +95,7 @@ def obtener_producto(
 )
 def crear_producto(
     payload: ProductCreate,
-    user: str = Depends(get_current_user),
+    id_casa: int = Depends(get_current_casa),
 ):
     producto = create_product(
         {
@@ -105,7 +105,8 @@ def crear_producto(
             "cantidad": payload.cantidad,
             "ubicacion": payload.ubicacion,
             "vence": payload.vence,
-        }
+        },
+        id_casa,
     )
 
     if producto is None:
@@ -129,7 +130,7 @@ def crear_producto(
 def actualizar_producto(
     codigo: str,
     payload: ProductUpdate,
-    user: str = Depends(get_current_user),
+    id_casa: int = Depends(get_current_casa),
 ):
     producto = update_product(
         codigo,
@@ -141,6 +142,7 @@ def actualizar_producto(
             "ubicacion": payload.ubicacion,
             "vence": payload.vence,
         },
+        id_casa,
     )
 
     if producto is None:
@@ -163,9 +165,9 @@ def actualizar_producto(
 )
 def eliminar_producto(
     codigo: str,
-    user: str = Depends(get_current_user),
+    id_casa: int = Depends(get_current_casa),
 ):
-    eliminado = delete_product(codigo)
+    eliminado = delete_product(codigo, id_casa)
 
     if not eliminado:
         raise HTTPException(

@@ -1,6 +1,7 @@
 from urllib.parse import parse_qs
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -9,6 +10,7 @@ from app import products_repo
 from app.database import get_connection
 from app.api import router as api_router
 from app.deps import current_user
+from app.security import hash_password, verify_password
 
 # =======================================
 # INICIALIZACIÓN DE LA APLICACIÓN FASTAPI
@@ -24,6 +26,15 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Montar la API JSON bajo el prefijo /api
 app.include_router(api_router)
+
+# Permitir que la app React Native (Expo, en otro origen/host) consuma la API.
+# En desarrollo se permite cualquier origen; para producción conviene restringirlo.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.middleware("http")
@@ -167,7 +178,7 @@ async def register_post(request: Request):
         INSERT INTO usuario (id_casa, nombre, correo, contrasena)
         VALUES (%s, %s, %s, %s)
         """,
-        (id_casa, username, email, password)
+        (id_casa, username, email, hash_password(password))
     )
 
     conexion.commit()
@@ -214,7 +225,7 @@ async def login_post(request: Request):
     conexion.close()
 
     # Verificar usuario y contraseña
-    if not usuario or usuario[2] != password:
+    if not usuario or not verify_password(password, usuario[2]):
         return RedirectResponse(
             url="/?error=Usuario o contraseña incorrectos.",
             status_code=303

@@ -29,7 +29,7 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    codigo: Optional[str] = Field(default=None, description="Si no se envía, se genera automáticamente")
+    pass
 
 
 class ProductUpdate(ProductBase):
@@ -68,3 +68,22 @@ class ShoppingItemOut(BaseModel):
     personalizado: bool
 
 
+class LoginIn(BaseModel):
+    username: str
+    password: str
+
+
+class RegistroIn(BaseModel):
+    username: str
+    email: str
+    password: str
+
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class UserOut(BaseModel):
+    username: str
+    id_casa: int
