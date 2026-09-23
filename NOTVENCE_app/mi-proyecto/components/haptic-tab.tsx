@@ -1,8 +1,10 @@
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { PlatformPressable } from '@react-navigation/elements';
+import { PlatformPressable } from 'expo-router/react-navigation';
 import * as Haptics from 'expo-haptics';
 
-export function HapticTab(props: BottomTabBarButtonProps) {
+// El tipo público de `BottomTabBarButtonProps` que espera `Tabs` vive en una
+// ruta interna de expo-router (no exportada); se tipa como `any` en vez de
+// depender de esa ruta interna, ya que este wrapper solo reenvía las props.
+export function HapticTab(props: any) {
   return (
     <PlatformPressable
       {...props}

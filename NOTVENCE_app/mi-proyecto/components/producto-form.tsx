@@ -51,7 +51,6 @@ export function ProductoForm({ inicial, onSubmit, textoBoton }: ProductoFormProp
 
   useEffect(() => {
     if (!categoria) {
-      setPresentaciones([]);
       return;
     }
     let activo = true;
@@ -129,7 +128,7 @@ export function ProductoForm({ inicial, onSubmit, textoBoton }: ProductoFormProp
       <Text style={styles.label}>Presentación</Text>
       <View style={styles.pickerWrapper}>
         <Picker selectedValue={presentacion} onValueChange={setPresentacion} enabled={!enviando}>
-          {presentaciones.map((p) => (
+          {(categoria ? presentaciones : []).map((p) => (
             <Picker.Item key={p} label={p} value={p} />
           ))}
         </Picker>
